@@ -1,6 +1,7 @@
 package model;
 
 
+import javafx.application.Platform;
 import view.Observer;
 
 import java.util.ArrayList;
@@ -9,15 +10,35 @@ import java.util.Random;
 
 public class Game extends Observable {
 
+    /**
+     * List of observers
+     */
     private List<Observer> observers;
 
+    /**
+     * Plateau
+     */
     private int[][] grid;
 
+    /**
+     * Plateau's size
+     */
     private int size;
 
+    /**
+     * Number of games played
+     */
     private int gamesPlayed;
 
+    /**
+     * Number of games won
+     */
     private int gamesWon;
+
+    /**
+     * Objective value to reach
+     */
+    private int objective;
 
     /**
      * Constructor class Game
@@ -27,8 +48,8 @@ public class Game extends Observable {
         this.size = size;
         this.gamesPlayed = 0;
         this.gamesWon = 0;
+        this.objective = 2048;
         this.observers = new ArrayList<>();
-        this.grid = new int[this.size][this.size];
         this.init();
 
     }
@@ -38,7 +59,7 @@ public class Game extends Observable {
      */
     private void init() {
         Random random = new Random();
-
+        this.grid = new int[this.size][this.size];
         // Fill the grid
         for (int i = 0 ; i < this.size ; i++) {
             for (int j = 0 ; j < this.size ; j++) {
@@ -75,6 +96,15 @@ public class Game extends Observable {
 
     }
 
+    public void editSize() {
+        System.out.println("Edit size");
+        this.init();
+    }
+
+    public void exit() {
+        Platform.exit();
+    }
+
     /**
      * Procedure to add an Observer to the model
      * @param observer
@@ -96,6 +126,14 @@ public class Game extends Observable {
 
     // Getter & Setter
 
+    public int getObjective() {
+        return this.objective;
+    }
+
+    public void setObjective(int objective) {
+        this.objective = objective;
+    }
+
     public String getCase(int line, int column) {
         return String.valueOf(this.grid[line][column]);
     }
@@ -106,6 +144,8 @@ public class Game extends Observable {
 
     public void setSize(int size) {
         this.size = size;
+        this.grid = new int[size][size];
+        this.init();
     }
 
     public String getGamesPlayed() {
