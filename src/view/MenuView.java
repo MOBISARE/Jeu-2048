@@ -91,7 +91,7 @@ public class MenuView extends MenuBar implements Observer {
         //System.out.println(dialog.getResult());
         this.game.setSize(result);
         System.out.println(this.game.getSize());
-        //this.game.editSize();
+        this.game.editSize();
         this.game.notifyObserver();
     }
 

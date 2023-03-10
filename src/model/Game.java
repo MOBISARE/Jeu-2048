@@ -18,7 +18,9 @@ public class Game extends Observable {
     /**
      * Plateau
      */
-    private int[][] grid;
+    //private int[][] grid;
+
+    private List<List<Integer>> matrice;
 
     /**
      * Plateau's size
@@ -50,6 +52,7 @@ public class Game extends Observable {
         this.gamesWon = 0;
         this.objective = 2048;
         this.observers = new ArrayList<>();
+        this.matrice = new ArrayList<>();
         this.init();
 
     }
@@ -59,32 +62,35 @@ public class Game extends Observable {
      */
     private void init() {
         Random random = new Random();
-        this.grid = new int[this.size][this.size];
+        //this.grid = new int[this.size][this.size];
+
         // Fill the grid
         for (int i = 0 ; i < this.size ; i++) {
+            this.matrice.add(i, new ArrayList<>(this.size));
             for (int j = 0 ; j < this.size ; j++) {
-                this.grid[i][j] = 0;
+                this.matrice.get(i).add(j, 0);
+                //this.grid[i][j] = 0;
             }
         }
 
         // Initialise random values
-        int line = random.nextInt(this.grid.length);
-        int column = random.nextInt(this.grid.length);
+        int line = random.nextInt(this.size);
+        int column = random.nextInt(this.size);
         boolean bool = random.nextBoolean();
 
         // Insert 2 cases with value 2 or 4 randomly
         for(int i = 0 ; i < 2 ; i++) {
 
-            while (this.grid[line][column] == 2 || this.grid[line][column] == 4) {
-                line = random.nextInt(this.grid.length);
-                column = random.nextInt(this.grid.length);
+            while (this.matrice.get(line).get(column) == 2 || this.matrice.get(line).get(column) == 4) {
+                line = random.nextInt(this.size);
+                column = random.nextInt(this.size);
                 bool = random.nextBoolean();
             }
 
             if (bool) {
-                this.grid[line][column] = 2;
+                this.matrice.get(line).set(column, 2);
             } else {
-                this.grid[line][column] = 4;
+                this.matrice.get(line).set(column, 4);
             }
         }
     }
@@ -98,6 +104,7 @@ public class Game extends Observable {
 
     public void editSize() {
         System.out.println("Edit size");
+        this.matrice = new ArrayList<>(this.size);
         this.init();
     }
 
@@ -135,7 +142,7 @@ public class Game extends Observable {
     }
 
     public String getCase(int line, int column) {
-        return String.valueOf(this.grid[line][column]);
+        return String.valueOf(this.matrice.get(line).get(column));
     }
 
     public int getSize() {
@@ -144,8 +151,7 @@ public class Game extends Observable {
 
     public void setSize(int size) {
         this.size = size;
-        this.grid = new int[size][size];
-        this.init();
+        this.matrice = new ArrayList<>();
     }
 
     public String getGamesPlayed() {
